@@ -23,10 +23,7 @@ WORKDIR /app/couchpotato
 VOLUME /config /downloads /movies
 
 # Add libs & tools
-RUN apt-get update && \
-	apt-get install -y --no-install-recommends libfuse-dev autoconf automake wget build-essential git  && \
-	apt-get clean && \
-	rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache --update fuse-dev autoconf automake wget alpine-sdk git
 
 # Install rar2fs
 COPY rar2fs-assets/install_rar2fs.sh /tmp/
@@ -34,9 +31,7 @@ RUN /bin/sh /tmp/install_rar2fs.sh
 
 
 # CLEAN Image
-RUN apt-get remove -y autoconf build-essential git automake && \
-	apt autoremove -y
-RUN rm -rf /tmp/* /var/tmp/*
+RUN apk del autoconf automake alpine-sdk git
 
 # Add start script
 COPY rar2fs-assets/30-rar2fs-mount /etc/cont-init.d/
